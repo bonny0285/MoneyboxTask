@@ -43,30 +43,28 @@ class LoginVC: UIViewController {
     
     @IBAction func loginBtnWasPressed(_ sender: Any) {
         AF.request(urlPOST, method: .post, parameters: self.parameters, encoder: encoder, headers: header, interceptor: nil).responseJSON { (response) in
-            //debugPrint(response)
+            
             switch response.result{
             case .success(let value):
-               // print(value)
+              
                 let myJSON : JSON = JSON(arrayLiteral: value)
                 let token = myJSON[0]["Session"]["BearerToken"]
                 let lastNameJSON = myJSON[0]["User"]["LastName"]
                 let nameJSON = myJSON[0]["User"]["FirstName"]
-               
+                let inv = myJSON[0]["User"]["InvestorProduct"]
                 
                 
                 self.myUser.token = "\(token)"
                 self.myUser.name = "\(nameJSON)"
                 self.myUser.surname = "\(lastNameJSON)"
-                
-               // self.getData(user: self.myUser)
+
                 
                 AF.request(self.urlGETInvestor, method: .get,headers: self.getHeader()).responseJSON { (response) in
                     let response = response
                     switch response.result{
                     case .success(let value):
-                        //print(value)
+                        
                         let investorJSON : JSON = JSON(arrayLiteral: value)
-                        //print(investorJSON)
                         
                         let jsonTotalPlanValue = investorJSON[0]["TotalPlanValue"]
                         self.myUser.totalPlanValue = Double("\(jsonTotalPlanValue)") as! Double
@@ -76,7 +74,7 @@ class LoginVC: UIViewController {
                         var planValue = [Int : String]()
                         var moneyBox = [Int : String]()
                         var id = [Int : String]()
-                        
+                       
                         for i in investorJSON[0]["ProductResponses"] {
                             counterFriendlyName += 1
                         }
@@ -100,7 +98,7 @@ class LoginVC: UIViewController {
                         for i in 0...counterFriendlyName - 1 {
                             id[i] = "\(investorJSON[0]["ProductResponses"][i]["Id"])"
                         }
-                        print("I MIEI ID",id)
+                       
                         self.myUser.friendlyName = friendly
                         self.myUser.planValue = planValue
                         self.myUser.moneyBox = moneyBox
@@ -114,8 +112,6 @@ class LoginVC: UIViewController {
                 print(error)
             }
         }
-        
-       // print("MY USER ", myUser.name)
     }
     
     
@@ -125,14 +121,9 @@ class LoginVC: UIViewController {
         return myUser
     }
     
-//    func getToken()-> [String:String]{
-//        var token = ["BearerToken":"Bearer \(myUser.token)"]
-//        return token
-//    }
-    
+
     
     func getHeader() -> HTTPHeaders{
-        //var heaterInv = HTTPHeaders()
         headerInvestor = ["Authorization":"Bearer \(myUser.token)","AppId":"3a97b932a9d449c981b595","Content-Type":"application/json","appVersion":"5.10.0","apiVersion":"3.0.0"]
         return headerInvestor
     }

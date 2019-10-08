@@ -23,8 +23,7 @@ class UserAccountVC: UIViewController {
     var encoder = JSONParameterEncoder()
     var urlPOST = "https://api-test01.moneyboxapp.com/users/login"
     var urlGETInvestor = "https://api-test01.moneyboxapp.com/investorproducts"
-    
-//    var header : HTTPHeaders = ["AppId":"3a97b932a9d449c981b595","Content-Type":"application/json","appVersion":"5.10.0","apiVersion":"3.0.0","Authorization":""]
+     var headerInvestor : HTTPHeaders = ["":""]
     var parameters = ["Email":"androidtest@moneyboxapp.com","Password":"P455word12","Idfa":"ANYTHING"]
     
     
@@ -34,40 +33,36 @@ class UserAccountVC: UIViewController {
         accountTableView.dataSource = self
         nameLbl.text = "Hello \(myUserAccount.name) !"
         planLbl.text = "Total Plan Value: £\(myUserAccount.totalPlanValue)"
-       // getUserAccount()
+        accountTableView.reloadData()
         
     }
-
     
+
     //Funtions
     
     func getUserInfo(forUser user: User) -> User{
         self.myUserAccount = user
-       // self.myUserAccount = user
-      // nameLbl.text = user.name
         return myUserAccount
     }
     
     
-    func getReloadUserAccount(){
-        var header : HTTPHeaders = ["Authorization":"Bearer \(myUserAccount.token)","AppId":"3a97b932a9d449c981b595","Content-Type":"application/json","appVersion":"5.10.0","apiVersion":"3.0.0"]
-        AF.request(urlGETInvestor, method: .get, parameters: ["Authorization":"Bearer \(myUserAccount.token)"], encoder: encoder, headers: header, interceptor: nil).responseJSON { (response) in
-            let response = response
-            switch response.result{
-            case .success(let value):
-                //print(value)
-                let myJSON : JSON = JSON(arrayLiteral: value)
-                print(myJSON)
-            case .failure(let error):
-                print(error)
-            }
-        }
+    func updateInfo(forUser user: User)-> User{
+        self.myUserAccount = user
+        return myUserAccount
     }
     
+
+    
+    func getHeader() -> HTTPHeaders{
+        headerInvestor = ["Authorization":"Bearer \(myUserAccount.token)","AppId":"3a97b932a9d449c981b595","Content-Type":"application/json","appVersion":"5.10.0","apiVersion":"3.0.0"]
+        return headerInvestor
+    }
     // Actions
     @IBAction func logoutBtnWasPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    
     
 }
 
@@ -94,6 +89,7 @@ extension UserAccountVC:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let individualAccount = storyboard?.instantiateViewController(identifier: "individualAccountVC") as? IndividualAccount else { return }
         individualAccount.setupData(forAccount: myUserAccount, forPosition: indexPath.row)
+        accountTableView.reloadData()
         present(individualAccount, animated: true, completion: nil)
     }
     

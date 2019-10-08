@@ -263,6 +263,7 @@
                         <outlet property="friendlyNameLbl" destination="d3D-Yj-nGa" id="gs0-Kj-ncI"/>
                         <outlet property="moneyboxLbl" destination="JMN-ce-rRs" id="ZcD-Fo-wxk"/>
                         <outlet property="planValueLbl" destination="5QI-Ur-33r" id="RTM-UZ-YRn"/>
+                        <segue destination="Grd-Bb-zxI" kind="show" identifier="segueToAccount" id="tu8-mC-zC7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fOV-JZ-Kx9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -270,4 +271,7 @@
             <point key="canvasLocation" x="1250.7246376811595" y="-24.107142857142858"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="tu8-mC-zC7"/>
+    </inferredMetricsTieBreakers>
 </document>

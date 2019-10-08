@@ -21,4 +21,5 @@ class User{
     var planValue : [Int : String] = [0 : ""]
     var moneyBox : [Int : String] = [0 : ""]
     var id : [Int : String] = [0 : ""]
+    var investor : String = ""
 }
